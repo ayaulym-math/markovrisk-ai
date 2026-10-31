@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 import yfinance as yf
 import matplotlib.pyplot as plt
 
@@ -97,7 +98,7 @@ TEXTS = {
     },
 }
 
-LANGS = {"🇰🇿 Қазақша": "kk", "🇷🇺 Русский": "ru", "🇹🇷 Türkçe": "tr", "🇬🇧 English": "en"}
+LANGS = {"Қазақша": "kk", "Русский": "ru", "Türkçe": "tr", "English": "en"}
 
 STOCKS = {
     "Apple (AAPL)": "AAPL",
@@ -152,8 +153,8 @@ if st.sidebar.button(t["run"], type="primary"):
     st.subheader(t["res_h"])
     table = res.copy()
     table[t["model"]] = table["key"].map(lambda k: t[k])
-    table[t["acc"]] = table["acc"].round(3)
-    table[t["auc"]] = table["auc"].round(3)
+    table[t["acc"]] = table["acc"].map(lambda v: f"{v:.3f}")
+    table[t["auc"]] = table["auc"].map(lambda v: "—" if pd.isna(v) else f"{v:.3f}")
     st.dataframe(table[[t["model"], t["acc"], t["auc"]]].set_index(t["model"]),
                  use_container_width=True)
 
